@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import urllib2
-import BeautifulSoup
+import bs4 as BeautifulSoup
 import re
 import gzip,StringIO
 import os
@@ -24,7 +24,7 @@ def getHtmlString(response):
 def getlinks(host, url, html_str, pattern):
     links = []
     # 分析网页，找到所有的超链接，通过pattern过滤有效的超链接。
-    soup = BeautifulSoup.BeautifulSoup(html_str)
+    soup = BeautifulSoup.BeautifulSoup(html_str,"html.parser")
     linksstring = soup.findAll(href=re.compile(pattern))
     for linkstring in linksstring :
         links.append(linkstring['href'])
@@ -61,7 +61,7 @@ def fileDownloaded(host, url):
 
 
 def getHtmlFile(prot, host, url, pattern):
-    if os.path.splitext(url)[1].find('html#')==-1:
+    if os.path.splitext(url)[1].find('#')==-1:
         logging.info("Get html : %s%s", host, url)
         print("Get html : %s%s"%(host,url))
         try:
